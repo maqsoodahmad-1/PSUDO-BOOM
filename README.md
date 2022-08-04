@@ -1,14 +1,12 @@
-# PSUDO-BOOM
-Software for facilitation of various government schemes for Persons with Disabilities.
-We are developing the Prograssive Web App (PWA)for PWD users using REACT JS, NODE JS.
+# PSUDO-BOOM**Software for facilitation of various government schemes for Persons with Disabilities.
+**We are developing the Prograssive Web App (PWA)for PWD users using REACT JS, NODE JS.**
 
-AUTHENTICATION -
->> (Added the Schema of different Entities)
-Problem Statement Number: RK775 
-Problem Statement Title
-Software for facilitation of various Govt. schemes for persons with disabilities.        
-Problem Statement Description
-Background: A web/app-based solution required for facilitation of persons with disabilities under various Govt. Schemes.
+##AUTHENTICATION -## 
+###Problem Statement Number: RK775 ###
+###Problem Statement Title###
+##Software for facilitation of various Govt. schemes for persons with disabilities. ##       
+###Problem Statement Description###
+##Background:## A web/app-based solution required for facilitation of persons with disabilities under various Govt. Schemes.
 Summary: There are various flagship schemes launched by Govt. of India for persons with disability. However, many of the persons with disability and their caregivers are not aware of the same and hence could avail the benefit of these schemes. Such kind of software will enable the persons with disabilities and their caregivers to avail maximum benefit of the same for their social and personal empowerment. Objective: A web/app-based platform such as PWAs and offline Android/iOS apps, highly accessible to all types of disable persons that provides details of various schemes by Govt. of India.
 
 1)	Authentication:
