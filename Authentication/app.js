@@ -7,7 +7,8 @@ const jwt = require('jsonwebtoken')
 var path = require('path');
 app.use(express.json());
 //var hashPassword;
-
+// var salt = bcrypt.genSalt(10);
+var salt = "random";
 //middleware
 const auth = require("./middleware/auth");
 app.use(express.urlencoded({extended:true}))
@@ -22,8 +23,9 @@ app.set("view engine", "ejs");
 module.export = app ;
 //importing user context
 var User = require("./model/user");
+const { secureHeapUsed } = require("crypto");
 //=====================
-// ROUTES
+// ROUTESr },
 //=====================
 // Showing home page
 app.get("/", function (req, res) {
@@ -43,6 +45,7 @@ app.get("/register", function (req, res) {
 res.render('register', {
 title: 'Registration Page',
 first_name: '',
+message:'Welcome to the registration page kindly fill the details below',
 last_name: '',
 email: '',
 password: ''    
@@ -55,21 +58,32 @@ app.post("/register", async (req, res) => {
   // Our register logic starts here
   try {
     // Get user input
-    const { first_name, last_name, email, password } = req.body;
-    console.log(first_name);
-    console.log(last_name);
-    console.log(email);
-    console.log(password);
+    var { first_name, last_name, email, password,confirm_password } = req.body;
+    // console.log(first_name);
+    // console.log(last_name);
+    // console.log(email);
+    //  console.log(password);
 
     // Validate user input
-    if (!(email && password && first_name && last_name)) {
+    if (!(email && password && first_name && last_name && confirm_password)) {
       res.status(400).send("All input is required");
     }
+    if(!(password===confirm_password)){
+      return res.render('register',{
+        title: 'Registration Page',
+        first_name: '',
+        message:'Passwords should match',
+        last_name: '',
+        email: '',
+        password:'',
+        confirm_password:''
 
+      })
+    }
     // check if user already exist
     // Validate if user exist in our database
     const oldUser = await User.findOne({ email });
-
+    // console.log(oldUser.password);
     if (oldUser) {
       return res.render('login',
       {
@@ -94,33 +108,40 @@ app.post("/register", async (req, res) => {
   //   //});
   // });
   
+//    var securePassword = password;
+//    const hashPassword = async (password, saltRounds = 10) => {
+//     try {
+//         // Generate a salt
+//         const salt = await bcrypt.genSalt(saltRounds);
 
-   const hashPassword = async (password, saltRounds = 10) => {
-    try {
-        // Generate a salt
-        const salt = await bcrypt.genSalt(saltRounds);
+//         // Hash password
+//         this.securePassword = await bcrypt.hash(password, salt);
+//     } catch (error) {
+//         console.log(error);
+//     }
 
-        // Hash password
-        return await bcrypt.hash(password, salt);
-    } catch (error) {
-        console.log(error);
-    }
+//     console.log(securePassword)
+// //     // Return null if error
+// //     return null;
+//   }
+// hashPassword(password);
+// console.log(securePassword);
+// // hashPassword(password);
+// saltRounds = 10;
 
-    // Return null if error
-    return null;
-};
-const encryptedPassword =hashPassword(password);
-console.log(encryptedPassword);
+var securePassword = await bcrypt.hash(password,salt)
+//console.log(password)
+//console.log(securePassword);
   // Create user in our database
   var user = await User.create({
     first_name,
     last_name,
     email, // sanitize: convert email to lowercase
-    password
+    password:securePassword
   })
-  console.log(user.password)
+console.log(user.password)
 
-  user.password = encryptedPassword;
+  // user.password = encryptedPassword;
 
     // Create token
     const token = jwt.sign(
@@ -155,12 +176,12 @@ password: ''
 });
 
 // Our login logic starts here
-app.post("/login", async(req,res) => {
+app.post("/login",async (req,res) => {
   //Our Logic goes here
 
   try {
     // Get user input
-    const { email, password } = req.body;
+    var { email, password } = req.body;
     console.log(password)
     // Validate user input
     if (!(email && password)) {
@@ -169,38 +190,53 @@ app.post("/login", async(req,res) => {
     // Validate if user exist in our database
     const user = await User.findOne({ email });
     console.log(user);
-    console.log(user.password);
+    //hash the password again
+    // const saltRounds = 10;
+    // const salt = await bcrypt.genSalt(saltRounds);
+    // var securePassword = await bcrypt.hash(password,salt)
+    // console.log(password)
+    // console.log(securePassword)
+    // password = securePassword;
+      console.log(password);
+      const validPassword= await bcrypt.compare(password, user.password )
+        // ,(err,res) => {
 
-    if (user && (bcrypt.compare(password, user.password ,(err,res) => {
-      if(err){
-        console.log('Comparision Error', err);
+      // if(err){
+      //   console.log('Comparision Error', err);
+      // }
+    // });
+    console.log(validPassword);
+      if(validPassword) {
+        return res.status(200).json(user); 
       }
-    })
-    )) 
-    {
-      // Create token
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+  //   }).then(domatch => {
+  //       if(domatch){
+  //       // Create token
+  //       const token = jwt.sign(
+  //       { user_id: user._id, email },
+  //         process.env.TOKEN_KEY,
+  //       {
+  //         expiresIn: "2h",
+  //       }
+  //     );
 
-      // save user token
-      user.token = token;
+  //     // save user token
+  //     user.token = token;
 
-      // user
-       return res.status(200).json(user);
-    } 
-   
-    res.status(400).send("Invalid Credentials");
-  } catch (err) {
+  //     // user
+  //      return res.status(200).json(user);
+  //   }
+     else {res.status(400).send("Invalid Credentials");}
+      
+  //   });
+  }
+    catch (err) {
     console.log(err);
   }
   // Our register logic ends here
 
 });
+
 
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
