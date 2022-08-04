@@ -2,3 +2,7 @@
 Software for facilitation of various government schemes for Persons with Disabilities.
 We are developing the Prograssive Web App (PWA)for PWD users using REACT JS, NODE JS.
 
+<<<<<<< HEAD
+=======
+AUTHENTICATION -
+>>>>>>> fa843ef (Added the Schema of different Entities)

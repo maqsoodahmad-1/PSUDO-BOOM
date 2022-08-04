@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><%= title %></title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<h2>
+    <%=messageDisplay%>
+</h2>
+<h4>
+    <%=message%>
+</h4>
+<form action="/register" method="post" name="form1">
+<div class="form-group">
+<label for="exampleInputEmail1">First Name *</label>
+<input type="name" name="first_name" class="form-control" id="first_name" aria-describedby="nameHelp" placeholder="Enter first name" value="">
+</div>   
+<div class="form-group">
+<label for="exampleInputEmail1">Last Name *</label>
+<input type="name" name="last_name" class="form-control" id="last_name" aria-describedby="nameHelp" placeholder="Enter last name" value="">
+</div> 
+<div class="form-group">
+<label for="exampleInputEmail1">Guide Name </label>
+<input type="name" name="guide_name" class="form-control" id="guide_name" aria-describedby="nameHelp" placeholder="Enter Guide name" value="">
+</div> 
+<div class="form-group">
+<label for="exampleInputEmail1">Email *</label>
+<input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="">
+</div>
+<div class="form-group">
+<label for="exampleInputEmail1">Phone Number *</label>
+<input type="number" name="number" class="form-control" id="phone_number" aria-describedby="nameHelp" placeholder="Enter your number" value="">
+</div> 
+<div class="form-group">
+<label for="exampleInputEmail1">Adhar Number *</label>
+<input type="number" name="AdharNumber" class="form-control" id="AdharNumber" aria-describedby="nameHelp" placeholder="Enter your Adhar card Number" value="">
+</div> 
+<div class="form-group">
+<label for="exampleInputEmail1">Disability Type</label>
+<input type="name" name="disablityType" class="form-control" id="disablityType" aria-describedby="nameHelp" placeholder="Enter the type of disability" value="">
+</div> 
+<div class="form-group">
+<label for="exampleInputEmail1">Disability Percentage *</label>
+<input type="number" name="disabilityPercentage" class="form-control" id="disabilityPercentage" aria-describedby="nameHelp" placeholder="Enter Disability Percentage" value="">
+</div> 
+<div class="form-group">
+<label for="exampleInputEmail1">Password *</label>
+<input type="password" name="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="*********" value="">
+</div>
+<div class="form-group">
+<label for="exampleInputEmail1">Disability Percentage *</label>
+<input type="number" name="UDID Number" class="form-control" id="UDID Number" aria-describedby="nameHelp" placeholder="Enter the UDID Card Number" value="">
+</div> 
+<div class="form-group">"
+<label for="FileUpload">Upload File *</label>
+<input type="file" name="upload file" class="form-control" id="uploadFile" aria-describedby="emailHelp" placeholder="Upload the UDID Card" value="">
+</div>
+<div class="form-group">
+<label for="exampleInputEmail1">Confirm Password *</label>
+<input type="password" name="confirm_password" class="form-control" id="confirm-password" aria-describedby="emailHelp" placeholder="*********" value="">
+</div>
+<input type="submit" class="btn btn-primary" value="ADD">
+<a href="login" class="btn btn-success ml-2">Login Here</a>
+</form> 
+</body>
+</html>
