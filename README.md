@@ -11,16 +11,16 @@ Summary: There are various flagship schemes launched by Govt. of India for perso
 
 ***1)	Authentication:***
 **-a)	User Authentication:**
-***-i)	Registration:***
-***-(1)	 First Name*** - User will input their name and the name will stored in the database.
-***(-2)	 Last Name***– User will input their last name and it will be stored in the database.
-***-(3)	Email Id***- User will input a valid email id.
-***-(4)	Password***- User will create the password and confirm it.
-***-(5)	Submit***- When the “Register” button is pressed all the details will be taken by the server and stored in the database.
-***-ii)	Same User Authentication:***
+***i)	Registration:***
+***(1)	 First Name*** - User will input their name and the name will stored in the database.
+***(2)	 Last Name***– User will input their last name and it will be stored in the database.
+***(3)	Email Id***- User will input a valid email id.
+***(4)	Password***- User will create the password and confirm it.
+***(5)	Submit***- When the “Register” button is pressed all the details will be taken by the server and stored in the database.
+***ii)	Same User Authentication:***
 (1)	When the user with registered Email Id will try to register again with the different name then there will be message of “User already Registered. Proceed to Login” and a Login button will be displayed to take the user to the Login page.
 (2)	We provide the user authentication with the help of Email Id and Password. User’s input password will be stored in the database in the encrypted form.
-***-iii)	 Login:***
+***iii)	 Login:***
 (1)	When the User will input Email Id and Password then the details will be matched and the details of the user will be displayed.
 ***iv)	Token Expiry: ***
 We can pass the time to expires IN key in the options, it requires the number of seconds till the token will remain valid or the string of duration as ‘1h’, ‘2h’, ’10m’, etc.
