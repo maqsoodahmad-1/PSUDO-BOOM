@@ -22,7 +22,7 @@ Summary: There are various flagship schemes launched by Govt. of India for perso
 (2)	We provide the user authentication with the help of Email Id and Password. User’s input password will be stored in the database in the encrypted form.
 ***iii)	 Login:***
 (1)	When the User will input Email Id and Password then the details will be matched and the details of the user will be displayed.
-***iv)	Token Expiry: ***
+***iv)	Token Expiry:***
 We can pass the time to expires IN key in the options, it requires the number of seconds till the token will remain valid or the string of duration as ‘1h’, ‘2h’, ’10m’, etc.
 
 
