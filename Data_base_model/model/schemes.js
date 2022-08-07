@@ -5,10 +5,10 @@
     Category:    { type: String },
     availabe:    { type: Boolean },
     title:       { type: String },
-    link:        { type: String},
+    link:        { type: URL },
     Description: { type: String},
     id:          { type: Number, unique: true },
-    Applicaion:  { type: String },
+    Applictaion:  { type: String },
     start_date:  { type: String },
     end_date:    { type: String }
 

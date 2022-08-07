@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+    <title>
+        <%= title %>
+    </title>
+</head>
+
+<body>
+    <%= message %>
+    <form action="upload" enctype="multipart/form-data" method="post" name="form1">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Name *</label>
+            <input type="name" name="name" class="form-control" id="first_name" aria-describedby="nameHelp" placeholder="Enter first name" value="">
+        </div>   
+        <div class="form-group">
+            <label for="exampleInputEmail1">Description *</label>
+            <input type="name" name="Description" class="form-control" id="first_name" aria-describedby="nameHelp" placeholder="Enter first name" value="">
+            </div>   
+        <div class="form-group">"
+            <label for="FileUpload">Upload File *</label>
+            <input type="file" name=" image" class="form-control" id="uploadFile" aria-describedby="emailHelp" placeholder="Upload the UDID Card" value="">
+        </div>
+        <input type="submit" class="btn btn-primary" value="upload">
+    </form>
+</body>

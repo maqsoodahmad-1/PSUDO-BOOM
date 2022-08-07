@@ -5,6 +5,7 @@ var bcrypt = require('bcrypt');
 var app = express();
 const jwt = require('jsonwebtoken')
 var path = require('path');
+var Validate = require('./validation/validation')
 app.use(express.json());
 //var hashPassword;
 // var salt = bcrypt.genSalt(10);

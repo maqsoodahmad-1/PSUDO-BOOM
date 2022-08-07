@@ -5,12 +5,12 @@ const mongoose = require('mongoose');
 exports.connect = () => {
 // connecting to the database
   mongoose
-      .connect("mongodb://localhost/users"
+      .connect("mongodb://localhost:27017/users"
       , {
        useNewUrlParser: true,
-      //  useUnifiedTopology:true,
-      //  useCreateIndex: true,
-      //  useFindAndModify: false,
+        useUnifiedTopology:true,
+        //useCreateIndex: true,
+       // useFindAndModify: false,
       })
     .then( () => {
     console.log("successfully connected to the database");

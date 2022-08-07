@@ -14,7 +14,7 @@
 <h4>
     <%=message%>
 </h4>
-<form action="/register" method="post" name="form1">
+<form action="/register" enctype="multipart/form-data" method="post" name="form1">
 <div class="form-group">
 <label for="exampleInputEmail1">First Name *</label>
 <input type="name" name="first_name" class="form-control" id="first_name" aria-describedby="nameHelp" placeholder="Enter first name" value="">
@@ -25,7 +25,7 @@
 </div> 
 <div class="form-group">
 <label for="exampleInputEmail1">Guide Name </label>
-<input type="name" name="guide_name" class="form-control" id="guide_name" aria-describedby="nameHelp" placeholder="Enter Guide name" value="">
+<input type="name" name="Guide_name" class="form-control" id="guide_name" aria-describedby="nameHelp" placeholder="Enter Guide name" value="">
 </div> 
 <div class="form-group">
 <label for="exampleInputEmail1">Email *</label>
@@ -33,38 +33,35 @@
 </div>
 <div class="form-group">
 <label for="exampleInputEmail1">Phone Number *</label>
-<input type="number" name="number" class="form-control" id="phone_number" aria-describedby="nameHelp" placeholder="Enter your number" value="">
+<input type="tel" name="number" class="form-control" id="phone_number" aria-describedby="nameHelp" placeholder="Enter your number" value="">
 </div> 
 <div class="form-group">
 <label for="exampleInputEmail1">Adhar Number *</label>
-<input type="number" name="AdharNumber" class="form-control" id="AdharNumber" aria-describedby="nameHelp" placeholder="Enter your Adhar card Number" value="">
+<input type="tel" name="Aadhar_Number" class="form-control" id="Aadhar_Number" aria-describedby="nameHelp" placeholder="Enter your Adhar card Number" value="">
 </div> 
 <div class="form-group">
 <label for="exampleInputEmail1">Disability Type</label>
-<input type="name" name="disablityType" class="form-control" id="disablityType" aria-describedby="nameHelp" placeholder="Enter the type of disability" value="">
+<input type="name" name="Disability_Type" class="form-control" id="DisablityT_ype" aria-describedby="nameHelp" placeholder="Enter the type of disability" value="">
 </div> 
 <div class="form-group">
 <label for="exampleInputEmail1">Disability Percentage *</label>
-<input type="number" name="disabilityPercentage" class="form-control" id="disabilityPercentage" aria-describedby="nameHelp" placeholder="Enter Disability Percentage" value="">
+<input type="tel" name="Disability_Percentage" class="form-control" id="Disability_Percentage" aria-describedby="nameHelp" placeholder="Enter Disability Percentage" value="">
 </div> 
 <div class="form-group">
 <label for="exampleInputEmail1">Password *</label>
 <input type="password" name="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="*********" value="">
 </div>
 <div class="form-group">
-<label for="exampleInputEmail1">Disability Percentage *</label>
-<input type="number" name="UDID Number" class="form-control" id="UDID Number" aria-describedby="nameHelp" placeholder="Enter the UDID Card Number" value="">
+<label for="exampleInputEmail1">UDID Number*</label>
+<input type="tel" name="UDID_NO" class="form-control" id="UDID_NO" aria-describedby="nameHelp" placeholder="Enter the UDID Card Number" value="">
 </div> 
-<div class="form-group">"
-<label for="FileUpload">Upload File *</label>
-<input type="file" name="upload file" class="form-control" id="uploadFile" aria-describedby="emailHelp" placeholder="Upload the UDID Card" value="">
-</div>
 <div class="form-group">
 <label for="exampleInputEmail1">Confirm Password *</label>
 <input type="password" name="confirm_password" class="form-control" id="confirm-password" aria-describedby="emailHelp" placeholder="*********" value="">
 </div>
-<input type="submit" class="btn btn-primary" value="ADD">
+<input type="submit" class="btn btn-primary" value="Register">
 <a href="login" class="btn btn-success ml-2">Login Here</a>
+<a href="upload" class="btn btn-success ml-2">Upload </a> 
 </form> 
 </body>
 </html>
