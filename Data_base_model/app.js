@@ -180,14 +180,6 @@ app.post('/register', async (req, res) => {
         message:'User Already exists please login',
       })
     }
-      // Create token
-    const token = jwt.sign(
-     { user_id: user._id, email },
-       process.env.TOKEN_KEY,
-     {
-         expiresIn: "2h",
-     }
-     );
       
     const salt = await bcrypt.genSalt(10);
     var securePassword = await bcrypt.hash(password, salt);
