@@ -1,4 +1,4 @@
-const { MongoGridFSChunkError } = require('mongodb');
+// const { MongoGridFSChunkError } = require('mongodb');
 const mongoose = require('mongoose');
 //User Details
 const userSchema = new mongoose.Schema ({
@@ -12,9 +12,6 @@ const userSchema = new mongoose.Schema ({
    Disability_Type :      { type: String },
    Disability_Percentage: { type: Number },
    UDID_NO:               { type: Number },
-   // UDID_Card:             { data: Buffer,
-                           //  contentType: String }, 
-//   token:                  { type: String },
   message:                { type: String },
   status:                 { 
                             type: String,
@@ -25,12 +22,6 @@ const userSchema = new mongoose.Schema ({
                            type:String,
                            unique:true
                            },
-  // roles:                  [
-  //                        {
-  //                          type: mongoose.Schema.Types.ObjectId,
-  //                          ref:"Role"
-  //                        }     
-  // ]
  });
 
 

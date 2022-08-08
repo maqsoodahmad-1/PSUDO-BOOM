@@ -8,8 +8,7 @@ var path = require('path');
 var Validate = require('./validation/validation')
 app.use(express.json());
 //var hashPassword;
-// var salt = bcrypt.genSalt(10);
-var salt = "random";
+
 //middleware
 const auth = require("./middleware/auth");
 app.use(express.urlencoded({extended:true}))
@@ -30,53 +29,53 @@ const { secureHeapUsed } = require("crypto");
 //=====================
 // Showing home page
 app.get("/", function (req, res) {
-res.render('index', {
-title: 'Website',
-// name: '',
-// email: '',
-// password: ''    
-})
+  res.render('index', {
+    title: 'Website',
+    // name: '',
+    // email: '',
+    // password: ''    
+  })
 });
 // Showing secret page
 // app.get("/home", isLoggedIn, function (req, res) {
-// res.render("home");
-// });
-// Showing register form
-app.get("/register", function (req, res) {
-res.render('register', {
-title: 'Registration Page',
-first_name: '',
-message:'Welcome to the registration page kindly fill the details below',
-last_name: '',
-email: '',
-password: ''    
-})
-});
-
-//Register
-app.post("/register", async (req, res) => {
-
-  // Our register logic starts here
-  try {
-    // Get user input
-    var { first_name, last_name, email, password,confirm_password } = req.body;
-    // console.log(first_name);
-    // console.log(last_name);
-    // console.log(email);
-    //  console.log(password);
-
-    // Validate user input
-    if (!(email && password && first_name && last_name && confirm_password)) {
-      res.status(400).send("All input is required");
-    }
-    if(!(password===confirm_password)){
-      return res.render('register',{
-        title: 'Registration Page',
-        first_name: '',
-        message:'Passwords should match',
-        last_name: '',
-        email: '',
-        password:'',
+  // res.render("home");
+  // });
+  // Showing register form
+  app.get("/register", function (req, res) {
+    res.render('register', {
+      title: 'Registration Page',
+      first_name: '',
+      message:'Welcome to the registration page kindly fill the details below',
+      last_name: '',
+      email: '',
+      password: ''    
+    })
+  });
+  
+  //Register
+  app.post("/register", async (req, res) => {
+    
+    // Our register logic starts here
+    try {
+      // Get user input
+      var { first_name, last_name, email, password,confirm_password } = req.body;
+      // console.log(first_name);
+      // console.log(last_name);
+      // console.log(email);
+      //  console.log(password);
+      
+      // Validate user input
+      if (!(email && password && first_name && last_name && confirm_password)) {
+        res.status(400).send("All input is required");
+      }
+      if(!(password===confirm_password)){
+        return res.render('register',{
+          title: 'Registration Page',
+          first_name: '',
+          message:'Passwords should match',
+          last_name: '',
+          email: '',
+          password:'',
         confirm_password:''
 
       })
@@ -90,35 +89,35 @@ app.post("/register", async (req, res) => {
       {
         title :'Login Page',
         message:'User Already exists please login',
-    })
-  };
-
+      })
+    };
+    
     //Encrypt user password
     // const encryptedPassword = bcrypt.genSalt(10, (err, salt) => {
-    // bcrypt.hash(password, salt, function(err, hash) {
-    //     // Store hash in the database
-    // });
-
-  //   const myPlaintextPassword = 's0/\/\P4$$w0rD';
-  //   var encryptedPassword= bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
-  //   // Store hash in your password DB.
-  //   if(err){
-  //     console.log(err);
-  //   }
-    
-  //   //});
-  // });
-  
-//    var securePassword = password;
-//    const hashPassword = async (password, saltRounds = 10) => {
-//     try {
-//         // Generate a salt
-//         const salt = await bcrypt.genSalt(saltRounds);
-
-//         // Hash password
-//         this.securePassword = await bcrypt.hash(password, salt);
-//     } catch (error) {
-//         console.log(error);
+      // bcrypt.hash(password, salt, function(err, hash) {
+        //     // Store hash in the database
+        // });
+        
+        //   const myPlaintextPassword = 's0/\/\P4$$w0rD';
+        //   var encryptedPassword= bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+          //   // Store hash in your password DB.
+          //   if(err){
+            //     console.log(err);
+            //   }
+            
+            //   //});
+            // });
+            
+            //    var securePassword = password;
+            //    const hashPassword = async (password, saltRounds = 10) => {
+              //     try {
+                //         // Generate a salt
+                //         const salt = await bcrypt.genSalt(saltRounds);
+                
+                //         // Hash password
+                //         this.securePassword = await bcrypt.hash(password, salt);
+                //     } catch (error) {
+                  //         console.log(error);
 //     }
 
 //     console.log(securePassword)
@@ -130,7 +129,8 @@ app.post("/register", async (req, res) => {
 // // hashPassword(password);
 // saltRounds = 10;
 
-var securePassword = await bcrypt.hash(password,salt)
+var salt = await bcrypt.genSalt(10);
+var securePassword = await  bcrypt.hash(password,salt)
 //console.log(password)
 //console.log(securePassword);
   // Create user in our database
