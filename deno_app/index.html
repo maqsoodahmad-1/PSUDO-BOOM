@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text CORS</title>
+</head>
+<body>
+    <div id="status"></div>
+    <script type="module">
+        fetch('http://localhost:8080/api/users/register', {
+            body:JSON.stringify({ username:"abcd",
+        password:"abcd", email:"maqsoodmaxood75@gmail.com", 
+        contactNumber: 60053903349 }),
+        method:"POST",
+        })
+        .then( () => {
+            document.getElementById("status").innerHTML ="WORKING";
+        })
+        .catch( () => {
+            document.getElementById("status").innerHTML = "NOT WORKING"
+        });
+    </script>
+</body>
+</html>

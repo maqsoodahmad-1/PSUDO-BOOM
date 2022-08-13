@@ -228,17 +228,16 @@ app.post('/register', async (req, res) => {
         "User was registered successfully! Please check your email",
     });
 
-    //      nodemailer.sendConfirmationEmail(
-    //      user.first_name,
-    //      user.email,
-    //      user.confirmationCode
-    //     );
-    //  });
-    // console.log(UDID_Card.data);
-    // console.log(user)
+         nodemailer.sendConfirmationEmail(
+         user.first_name,
+         user.email,
+         user.confirmationCode
+        );
+    console.log(UDID_Card.data);
+    console.log(user)
 
 
-    // return new user
+    return new user
 
 
   }
