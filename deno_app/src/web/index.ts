@@ -4,6 +4,7 @@ import { UserController } from "../users/index.ts";
 import { AgencyController } from "../Agencies/index.ts";
 import { _format } from "https://deno.land/std@0.140.0/path/_util.ts";
 
+ //defining the interface for server 
 interface CreateServerDependencies {
   configuration: {
     port: number;
@@ -11,7 +12,7 @@ interface CreateServerDependencies {
       key: string,
       algorithm:Algorithm
     },
-    allowedOrigin: string[],
+  //  allowedOrigin: string[],
     // secure:boolean,
     // keyFile:string,
     // certFile:string
@@ -20,18 +21,19 @@ interface CreateServerDependencies {
   user: UserController;
   agencies:AgencyController
 }
+//Our interface enda here
 
 // const addTestHeaderMiddleware: RouterMiddleware = async (ctx, next) => {
 //   ctx.response.headers.set("X-Test", "true");
 //   await next();
 // };
 
-
+//server function of type having the interface of type createServerDependencies
 export async function createServer({
   configuration: {
     port,
     authorization,
-    allowedOrigin,
+    //allowedOrigin,
     // secure,
     // keyFile,
     // certFile
@@ -40,11 +42,15 @@ export async function createServer({
   user,
   agencies,
 }: CreateServerDependencies) {
+
+  //Defining the application in the oak 
   const app = new Application();
-  
+
+  //deifning the authentication 
   const authenticated = jwtMiddleware(authorization);
 
-  app.use(async (ctx, next) => {
+  //calculating the response time 
+    app.use(async (ctx, next) => {
     await next();
     const rt = ctx.response.headers.get("X-Response-Time");
     console.log(`${ctx.request.method} ${ctx.request.url} - ${rt}`);
@@ -57,44 +63,48 @@ export async function createServer({
     ctx.response.headers.set("X-Response-Time", `${ms}ms`);
   });
 
+//Adding the oak listen event listener this will be printed on the console
   app.addEventListener("listen", (e) => {
     console.log(
-      `Application running at   'http' ://${e.hostname || "loaclhost"}:${port}`,
+      `Application running at   http://${e.hostname || "loaclhost"}:${port}`,
     );
   });
 
+  //adding the error event listener of oak library this will handle the bad conditions  
   app.addEventListener("error", (e) => {
     console.log("An error occured", e.message);
   });
 
-//using the cors
-app.use(
-  oakCors({ origin: allowedOrigin })
-);
+ //using the cors
+//  app.use(
+//   oakCors({ origin: allowedOrigin })
+//  );
 
+ //definig the oak Router with prefix api
   const apiRouter = new Router({ prefix: "/api" });
 
+  //this message will be printed whenever the api router will bw called 
   apiRouter.use(async (_, next) => {
     console.log("Request was made to the API ROUTER");
     await next();
   });
 
-  apiRouter.get("/schemes", async (ctx) => {
-    ctx.response.body = {
-      museums: await schemes.getAll(),
-    };
-  });
-
+  
+  //Api for registering the user in the database
   apiRouter.post("/users/register", async (ctx) => {
-    const { username, password,email,contactNumber } = await ctx.request.body({ type: "json" })
-      .value;
 
+    //taking values from the vosy into the following variables
+    const { username, password,email,contactNumber } = await ctx.request.body({ type: "json" })
+    .value;
+    
+    //checking if all the inputs are given by the user and returning if the condition is true
     if (!username || !password || !email || !contactNumber) {
       ctx.response.status = 400;
 
       return;
     }
-
+    
+    //trying to create the user by calling the register function
     try {
       const createdUser = await user.register({
         username,
@@ -102,9 +112,10 @@ app.use(
         email,
         contactNumber,
       });
+      //if user is created then sending the status code and the createdUser 
       ctx.response.status = 201;
       ctx.response.body = { user: createdUser };
-    } catch (e) {
+    } catch (e) { //handling the errors if any 
       ctx.response.status = 400;
       ctx.response.body = { message: e.message };
     }
@@ -112,13 +123,14 @@ app.use(
 
   //login route for users
   apiRouter.post("/users/login", async (ctx) => {
+    //taking username and password from the body and trying to login by calling the login method defined in controllers 
     const { username, password } = await ctx.request.body().value;
     try {
       const { user: loginUser, token } = await user.login({
         username,
         password
       });
-
+      //sending user with token 
       ctx.response.body = { user: loginUser, token };
       ctx.response.status = 201;
     } catch (e) {
@@ -126,6 +138,24 @@ app.use(
       ctx.response.status = 400;
     }
   });
+
+  //Api for deleting the user form the database
+    apiRouter.delete("/users/delete", async (ctx) => {
+      const { username } = await ctx.request.body({ type: "json" }).value;
+      try {
+        const deletedUser = await user.deleteUser({ username })
+        ctx.response.status = 201;
+        ctx.response.body = { user:deletedUser };
+      } catch(e) {
+        ctx.response.status = 400;
+        ctx.response.body = {message: e.message}
+      }
+    })
+    apiRouter.get("/schemes", async (ctx) => {
+      ctx.response.body = {
+        museums: await schemes.getAll(),
+      };
+    });
 
   //Register route for Agencies
   apiRouter.post('/agencies/register', async (ctx) => {
@@ -167,6 +197,24 @@ app.use(
       ctx.response.body = { message: e.message };
       ctx.response.status = 400;
     }
+  });
+
+  //Api for deleting the Agencies form the database
+  apiRouter.delete("agencies/delete", async (ctx) => {
+    const { name } = await ctx.request.body({ type: "json" }).value;
+    try {
+      const deletedUser = await agencies.deleteAgency({ name })
+      ctx.response.status = 200;
+      ctx.response.body = deletedUser;
+    } catch(e) {
+      ctx.response.status = 400;
+      ctx.response.body = {message: e.message}
+    }
+  })
+  apiRouter.get("/schemes", async (ctx) => {
+    ctx.response.body = {
+      museums: await schemes.getAll(),
+    };
   });
 
   app.use(apiRouter.routes());

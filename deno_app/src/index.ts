@@ -26,22 +26,25 @@ const authConfiguration = {
 //connecting with the uri(connection string)
 const client = new MongoClient();
 await client.connect("mongodb://127.0.0.1:27017")
-const db = client.database("user");
+const Users = client.database("Pwd-Users");
+const Schemes = client.database("Schemes");
+const Agency = client.database("Agency");
 // const dbSchemes = client.database('schemes')
 
 const authRepository = new AuthRepository({
   configuration: authConfiguration
 });
 
-const schemesRepository = new SchemesRepository({storage:db});
+const schemesRepository = new SchemesRepository({storage:Schemes});
 const schemesController = new SchemesController({ schemesRepository });
 
-const userRepository = new UserRepository({storage:db});
+const userRepository = new UserRepository({storage:Users});
 const userController = new UserController({ userRepository,authRepository });
 
-const agenciesRepository = new AgencyRepository({storage:db});
-const agenciesController = new AgencyController({agenciesRepository,authRepository})
+const agenciesRepository = new AgencyRepository({storage:Agency});
+const agenciesController = new AgencyController({ agenciesRepository,authRepository})
 
+//inserting some random data into the schemes of the database 
 schemesRepository.storage.insertOne( {
   name: "Enforcement Education",
   category:"deaf pwd candidates ",
@@ -64,14 +67,15 @@ schemesRepository.storage.insertOne( {
   },
 });
 
+//defining the server dependencies 
 createServer({
   configuration: {
-    port: 8001,
+    port: 8080,
     authorization:{
       key: authConfiguration.key,
       algorithm: authConfiguration.algorithm
     },
-    allowedOrigin: ['http://localhost:3000'],
+  //  allowedOrigin: ['http://localhost:3000'],
     // secure:true,
     // certFile: "./certificate.pem",
     // keyFile: "./key.pem'"
@@ -80,5 +84,4 @@ createServer({
   user: userController,
   agencies:agenciesController
 });
-export {db}
 // console.log(await museumController.getAll())

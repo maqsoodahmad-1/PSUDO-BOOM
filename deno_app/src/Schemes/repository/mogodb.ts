@@ -11,7 +11,7 @@ interface RepositoryDependencies {
 export class Repository implements SchemesRepository {
     storage : Collection<Schemes>
     constructor({ storage }: RepositoryDependencies ) {
-        this.storage = storage.collection<Schemes>('Museums');
+        this.storage = storage.collection<Schemes>('Schemes');
     }
             async getAll() {
                 const all_Schemes = await this.storage.find().toArray();

@@ -12,25 +12,30 @@ export class Repository implements AgencyRepository {
     }
 
     // deno-lint-ignore require-await
-    async create (user: CreateAgency ) {
-        const userWithCreatedAt = { ...user, createdAt:new Date()}
-        this.storage.insertOne({ ...userWithCreatedAt })
-        return userWithCreatedAt;
+    async create (agency: CreateAgency ) {
+        const agencyWithCreatedAt = { ...agency, createdAt:new Date()}
+        this.storage.insertOne({ ...agencyWithCreatedAt })
+        return agencyWithCreatedAt;
     }
 
     async exists ( name: string ) {
-        return Boolean(await this.storage.count({ name }))
+        return Boolean(await this.storage.findOne({ name }))
     }
     // async exists(username: string) {
     //     return Boolean(this.storage.get(username));
     //   }
     
 
-    async getByUsername (name: string) {
+    async getByAgencyname (name: string) {
         const agency = await this.storage.findOne( { name } );
         if(!agency) {
             throw new Error ("User not found ")
         } 
         return agency;
+    }
+
+    async deleteAgency (name: string) {
+       const deletedAgency = await this.storage.deleteOne({ name });
+       return deletedAgency;
     }
 }

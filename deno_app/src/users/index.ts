@@ -9,4 +9,5 @@ export type {
      User,
      UserController,
      UserRepository,
+     DeleteUser
 } from "./types.ts"

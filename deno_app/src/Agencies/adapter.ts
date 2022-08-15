@@ -1,20 +1,21 @@
 // import { Schemes } from "../meseums/index.ts";
 import type { Agency, AgencyDto } from "./types.ts";
 
-export const userToUserDto = ( user: Agency ): AgencyDto => {
+export const agencyToAgencyDto = ( agency: Agency ): AgencyDto => {
     return {
-        name: user.name,
-        createdAt: user.createdAt,
-        email:user.email,
+        name: agency.name,
+        createdAt:agency.createdAt,
+        email:agency.email,
         Schemes:{
-            name:user.Schemes.name,
-            link:user.Schemes.link,
-            
+            name:agency.Schemes.name,
+            link:agency.Schemes.link,
+        
         },
         TypeOfAgency: {
-            Central:user.TypeOfAgency.Central,
-            State: user.TypeOfAgency.State
-        }
+            Central:agency.TypeOfAgency.Central,
+            State: agency.TypeOfAgency.State
+        
     }
 }
 
+}

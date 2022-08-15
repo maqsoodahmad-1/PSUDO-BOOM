@@ -11,6 +11,7 @@ export class Repository implements UserRepository {
         this.storage = storage.collection<User>('users');
     }
 
+    //create operation (creating a user in the database)
     // deno-lint-ignore require-await
     async create (user: CreateUser ) {
         const userWithCreatedAt = { ...user, createdAt:new Date()}
@@ -19,13 +20,13 @@ export class Repository implements UserRepository {
     }
 
     async exists ( username: string ) {
-        return Boolean(await this.storage.count({ username }))
+        return Boolean(await this.storage.findOne({ username }))
     }
     // async exists(username: string) {
     //     return Boolean(this.storage.get(username));
     //   }
     
-
+//read operation (reading the value of user from the database by username)
     async getByUsername (username: string) {
         const user = await this.storage.findOne( { username } );
         if(!user) {
@@ -33,4 +34,11 @@ export class Repository implements UserRepository {
         } 
         return user;
     }
+//delete operation on 
+    async deleteUser(username: string) {
+        const deletedUser = await this.storage.deleteOne({ username })
+        return deletedUser;
+    }
+    
+
 }

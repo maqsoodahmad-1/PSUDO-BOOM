@@ -1,4 +1,4 @@
-// deno-lint-ignore-file require-await
+/*// deno-lint-ignore-file require-await
 import { CreateUser , User, UserRepository } from "../types.ts";
 import { generateSalt, hashWithSalt } from "../util.ts";
 
@@ -32,4 +32,4 @@ export class Repository implements UserRepository {
     }
     return user;
   }
-}
+}*/
