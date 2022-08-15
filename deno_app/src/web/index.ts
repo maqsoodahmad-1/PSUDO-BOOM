@@ -1,5 +1,5 @@
 import { SchemesController } from "../Schemes/index.ts";
-import { Algorithm, Application, Router, oakCors, jwtMiddleware } from "../deps.ts";
+import { Algorithm, Application, Router, oakCors, jwtMiddleware, helpers } from "../deps.ts";
 import { UserController } from "../users/index.ts";
 import { AgencyController } from "../Agencies/index.ts";
 import { _format } from "https://deno.land/std@0.140.0/path/_util.ts";
@@ -43,7 +43,8 @@ export async function createServer({
   agencies,
 }: CreateServerDependencies) {
 
-  //Defining the application in the oak 
+  //Defining the application in the oak         // Schemes,
+        // TypeOfAgency,
   const app = new Application();
 
   //deifning the authentication 
@@ -138,12 +139,32 @@ export async function createServer({
       ctx.response.status = 400;
     }
   });
+  
+  //get the list of all the users 
+  apiRouter.get("/users", async (ctx)=> {
+    ctx.response.body = { users: await user.getAll()}
+  })
+
+  //PUT (UPDATE) operation on the user 
+  apiRouter.put("/users/update/:username",async (ctx) => {
+  const { username } = helpers.getQuery(ctx, {mergeParams: true });
+  const { contactNumber } = await ctx.request.body({type:"json"}).value;
+  try {
+    ctx.response.body = {updatedUser:await user.updatedUser({username,contactNumber})}
+    ctx.response.status = 201;
+  } catch(e) {
+    ctx.response.body = {message:e.message}
+    ctx.response.status= 400;
+  }
+  })
 
   //Api for deleting the user form the database
-    apiRouter.delete("/users/delete", async (ctx) => {
-      const { username } = await ctx.request.body({ type: "json" }).value;
+    apiRouter.delete("/users/delete/:username", async (ctx) => {
+      // const { username } = await ctx.request.body({ type: "json" }).value;
+      const { username } = helpers.getQuery(ctx, { mergeParams: true });
+      // const username = ctx.params.username;
       try {
-        const deletedUser = await user.deleteUser({ username })
+        const deletedUser = await user.deleteUser( {username} )
         ctx.response.status = 201;
         ctx.response.body = { user:deletedUser };
       } catch(e) {
@@ -159,9 +180,9 @@ export async function createServer({
 
   //Register route for Agencies
   apiRouter.post('/agencies/register', async (ctx) => {
-    const { name, email, Schemes, TypeOfAgency, password } = await ctx.request.body({type:"json"}).value;
+    const { name, email, /* Schemes, TypeOfAgency,*/ password } = await ctx.request.body({type:"json"}).value;
     //check if all the inputs were given
-    if( !name || !email || ! Schemes || TypeOfAgency || !password ) {
+    if( !name || !email /*|| ! Schemes || TypeOfAgency */ || !password ) {
       ctx.response.status = 400;
       return;
     }
@@ -170,8 +191,8 @@ export async function createServer({
       const CreatedAgency = await agencies.register({
         name,
         email,
-        Schemes,
-        TypeOfAgency,
+        // Schemes,
+        // TypeOfAgency,
         password
       });
       ctx.response.status = 201;
@@ -181,7 +202,7 @@ export async function createServer({
       ctx.response.body = { message:e.message }
     }
   })
-
+  
   //login route for agencies
   apiRouter.post('/agencies/login', async (ctx) => {
     const { name, password } = await ctx.request.body({type:"json"}).value;
@@ -190,7 +211,7 @@ export async function createServer({
         name,
         password,
       });
-
+      
       ctx.response.body = { agencies: loginAgency, token };
       ctx.response.status = 201;
     } catch (e) {
@@ -211,9 +232,11 @@ export async function createServer({
       ctx.response.body = {message: e.message}
     }
   })
+
+  //get the list of all the schemes
   apiRouter.get("/schemes", async (ctx) => {
     ctx.response.body = {
-      museums: await schemes.getAll(),
+      schemes: await schemes.getAll(),
     };
   });
 

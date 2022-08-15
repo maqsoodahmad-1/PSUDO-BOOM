@@ -1,4 +1,4 @@
-import { User, CreateUser, UserRepository } from "../types.ts";
+import { User, CreateUser, UserRepository, UserDto } from "../types.ts";
 import { Database, Collection } from '../../deps.ts' 
 
 interface RepositoryDependencies {
@@ -34,6 +34,29 @@ export class Repository implements UserRepository {
         } 
         return user;
     }
+
+    //Getting all the users from the database
+    async getAll () {
+        try{
+        const all_users = await this.storage.find().toArray();
+        return all_users;
+        } catch(e) {
+            return new Error("no user exist");
+        }
+    }
+
+    //updating the details of the user 
+    async updateUser (username:string, newNumber:number) {
+       try{
+        await this.storage.updateOne({username}, {$set:{ contactNumber: newNumber}});
+        const updatedUser = this.getByUsername(username)
+        return updatedUser;
+       } catch(e) {
+        return new Error("Can't update the details");
+       }
+        
+    }
+
 //delete operation on 
     async deleteUser(username: string) {
         const deletedUser = await this.storage.deleteOne({ username })

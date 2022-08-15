@@ -6,16 +6,16 @@ export const agencyToAgencyDto = ( agency: Agency ): AgencyDto => {
         name: agency.name,
         createdAt:agency.createdAt,
         email:agency.email,
-        Schemes:{
-            name:agency.Schemes.name,
-            link:agency.Schemes.link,
+    //     Schemes:{
+    //         name:agency.Schemes.name,
+    //         link:agency.Schemes.link,
         
-        },
-        TypeOfAgency: {
-            Central:agency.TypeOfAgency.Central,
-            State: agency.TypeOfAgency.State
+    //     },
+    //     TypeOfAgency: {
+    //         Central:agency.TypeOfAgency.Central,
+    //         State: agency.TypeOfAgency.State
         
-    }
+    // }
 }
 
 }

@@ -8,8 +8,8 @@ import type {
   Agency,
   AgencyRepository,
   LoginPayload,
-  scheme,
-  typeOfAgency,
+  // scheme,
+  // typeOfAgency,
 DeletePayload
 } from "./types.ts";
 import { generateSalt ,hashWithSalt } from "./util.ts";
@@ -38,15 +38,15 @@ export class Controller implements AgencyController {
     return Promise.reject(false);
   }
   
-  private async getHashedAgency(name: string, password: string, email: string, Schemes:scheme, TypeOfAgency: typeOfAgency) {
+  private async getHashedAgency(name: string, password: string, email: string, /*Schemes:scheme, TypeOfAgency: typeOfAgency*/) {
     const salt = generateSalt();
     const user = {
       name,
       hash: hashWithSalt(password, salt),
       salt,
       email,
-      Schemes,
-      TypeOfAgency
+      // Schemes,
+      // TypeOfAgency
       
     };
 
@@ -59,7 +59,7 @@ export class Controller implements AgencyController {
       return Promise.reject("Username already exists");
     }
 
-    const createdAgency = await this.agencyRepository.create(await this.getHashedAgency( payload.name, payload.password, payload.email, payload.Schemes, payload.TypeOfAgency));
+    const createdAgency = await this.agencyRepository.create(await this.getHashedAgency( payload.name, payload.password, payload.email,/* payload.Schemes, payload.TypeOfAgency*/));
 
     return agencyToAgencyDto(createdAgency);
   } 

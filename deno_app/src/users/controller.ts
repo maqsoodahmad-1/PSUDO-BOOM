@@ -8,7 +8,9 @@ import type {
   User,
   UserRepository,
   LoginPayload,
-  DeleteUser
+  DeleteUser,
+UserDto,
+UpdatePayload
 } from "./types.ts";
 import { generateSalt ,hashWithSalt } from "./util.ts";
 import { AuthRepository } from "../deps.ts"
@@ -72,6 +74,18 @@ export class Controller implements UserController {
       throw new Error ("Username and password combination is not correct");
     }
   }
+  //getting all the users
+  public async getAll() {
+      return this.userRepository.getAll();
+  }
+
+  //updating the user
+  public async updatedUser(payload:UpdatePayload) {
+    // const { username } = payload.username;
+    return await  this.userRepository.updateUser(payload.username,payload.contactNumber);
+ 
+  }
+
   //Deleting the user form the database 
   public async deleteUser( payload: DeleteUser ){
     if( await this.userRepository.exists(payload.username)) {
