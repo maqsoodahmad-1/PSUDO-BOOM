@@ -22,7 +22,7 @@ interface ControllerDependencies {
 
 export class Controller implements UserController {
   userRepository: UserRepository;
-  authRepository!: AuthRepository;
+  authRepository: AuthRepository;
 
   constructor({ userRepository,authRepository }: ControllerDependencies) {
     this.userRepository = userRepository;

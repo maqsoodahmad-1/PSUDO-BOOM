@@ -8,23 +8,28 @@ export type Schemes = {
     description: string,
     startDate: Date,
     endDate: Date,
-    DateOfBirth:Date,
     applicationLink:URL
     schemeType: {
         centeral:boolean,
         state: boolean
     },
-    location: {
-        lat: string,
-        lng: string
-
-    }
+  
 }
 
-export interface SchemesController {
-    getAll: () => Promise<Schemes[]>;
-}
 
 export interface SchemesRepository {
     getAll: () => Promise<Schemes[]>
+    exists:(name:string) => Promise<boolean>
+    createScheme: (scheme:Schemes) => Promise<Schemes | Error>
+
+}
+
+// e/xport Type ScehemPayload = {}
+
+
+
+
+export interface SchemesController {
+    getAll: () => Promise<Schemes[]>;
+    createdScheme:(payload:Schemes) => Promise<Schemes | Error>
 }

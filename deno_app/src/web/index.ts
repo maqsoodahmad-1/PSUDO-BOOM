@@ -3,6 +3,7 @@ import { Algorithm, Application, Router, oakCors, jwtMiddleware, helpers } from 
 import { UserController } from "../users/index.ts";
 import { AgencyController } from "../Agencies/index.ts";
 import { _format } from "https://deno.land/std@0.140.0/path/_util.ts";
+import type { Schemes } from "../Schemes/types.ts"
 
  //defining the interface for server 
 interface CreateServerDependencies {
@@ -95,12 +96,13 @@ export async function createServer({
   apiRouter.post("/users/register", async (ctx) => {
 
     //taking values from the vosy into the following variables
-    const { username, password,email,contactNumber } = await ctx.request.body({ type: "json" })
+    const { username,password,email,contactNumber } = await ctx.request.body({ type: "json" })
     .value;
     
     //checking if all the inputs are given by the user and returning if the condition is true
     if (!username || !password || !email || !contactNumber) {
-      ctx.response.status = 400;
+      ctx.response.body = { message:"all the inputs are required" };
+      ctx.response.status = 401;
 
       return;
     }
@@ -113,12 +115,14 @@ export async function createServer({
         email,
         contactNumber,
       });
+     
       //if user is created then sending the status code and the createdUser 
-      ctx.response.status = 201;
-      ctx.response.body = { user: createdUser };
+         ctx.response.status = 201;
+         ctx.response.body = { user: createdUser };
+
     } catch (e) { //handling the errors if any 
       ctx.response.status = 400;
-      ctx.response.body = { message: e.message };
+      ctx.response.body = { message: "user already exists with same name " };
     }
   });
 
@@ -180,9 +184,9 @@ export async function createServer({
 
   //Register route for Agencies
   apiRouter.post('/agencies/register', async (ctx) => {
-    const { name, email, /* Schemes, TypeOfAgency,*/ password } = await ctx.request.body({type:"json"}).value;
+    const { name, email, schemesName, schemesLink, TypeOfAgency } = await ctx.request.body({type:"json"}).value;
     //check if all the inputs were given
-    if( !name || !email /*|| ! Schemes || TypeOfAgency */ || !password ) {
+    if( !name || !email || ! schemesName || schemesLink || TypeOfAgency ) {
       ctx.response.status = 400;
       return;
     }
@@ -191,9 +195,9 @@ export async function createServer({
       const CreatedAgency = await agencies.register({
         name,
         email,
-        // Schemes,
-        // TypeOfAgency,
-        password
+        schemesName,
+        schemesLink,
+        TypeOfAgency,
       });
       ctx.response.status = 201;
       ctx.response.body = { agencies:CreatedAgency }
@@ -203,38 +207,70 @@ export async function createServer({
     }
   })
   
-  //login route for agencies
-  apiRouter.post('/agencies/login', async (ctx) => {
-    const { name, password } = await ctx.request.body({type:"json"}).value;
-    try {
-      const { agencies: loginAgency, token } = await agencies.login({
-        name,
-        password,
-      });
+  // //login route for agencies
+  // apiRouter.post('/agencies/login', async (ctx) => {
+  //   const { name, password } = await ctx.request.body({type:"json"}).value;
+  //   try {
+  //     const { agencies: loginAgency, token } = await agencies.login({
+  //       name,
+  //       password,
+  //     });
       
-      ctx.response.body = { agencies: loginAgency, token };
+  //     ctx.response.body = { agencies: loginAgency, token };
+  //     ctx.response.status = 201;
+  //   } catch (e) {
+  //     ctx.response.body = { message: e.message };
+  //     ctx.response.status = 400;
+  //   }
+  // });
+ 
+  //Api for updatig the Agency details
+  apiRouter.put('/agencies/update/:name', async(ctx) => {
+    const { name } = helpers.getQuery( ctx, { mergeParams: true });
+    const { newname } = await ctx.request.body({type:"json"}).value;
+    try {
+      ctx.response.body = {updatedAgency:await agencies.updatedAgency({name,newname})}
       ctx.response.status = 201;
-    } catch (e) {
-      ctx.response.body = { message: e.message };
-      ctx.response.status = 400;
+    } catch(e) {
+      ctx.response.body = {message:e.message}
+      ctx.response.status= 400;
     }
-  });
+    
+  })
 
   //Api for deleting the Agencies form the database
-  apiRouter.delete("agencies/delete", async (ctx) => {
-    const { name } = await ctx.request.body({ type: "json" }).value;
+  apiRouter.delete("/agencies/delete/:name",  async (ctx) => {
+   const { name } = helpers.getQuery(ctx, { mergeParams:true })
     try {
-      const deletedUser = await agencies.deleteAgency({ name })
+      const deletedAgency = await agencies.deleteAgency({ name })
       ctx.response.status = 200;
-      ctx.response.body = deletedUser;
+      ctx.response.body = { agency:deletedAgency };
     } catch(e) {
       ctx.response.status = 400;
       ctx.response.body = {message: e.message}
     }
   })
 
+  //Api for creating schema
+  apiRouter.post('/schemes/create',  async(ctx) => {
+    const { name,description,isActive,category,typeOfBenifits,disabilityCriteria,startDate,endDate,schemeType,location,applicationLink } = await ctx.request.body({type:"json"}).value
+  if( !name || !description || !isActive || ! category || ! typeOfBenifits || !startDate || !endDate || !schemeType || !location || !applicationLink ) {
+    ctx.response.status = 400;
+    return;
+  }
+  try{
+    const schemevalues = await { name,description,isActive,category,typeOfBenifits,disabilityCriteria,startDate,endDate,schemeType,location,applicationLink}
+    const createdScheme = await schemes.createdScheme(schemevalues)
+    ctx.response.body = {CreatedScehem: createdScheme}
+    ctx.response.status = 200
+  } catch (e) {
+    ctx.response.status = 400;
+  }
+}
+  )
+
   //get the list of all the schemes
-  apiRouter.get("/schemes", async (ctx) => {
+  apiRouter.get("/schemes/get", async (ctx) => {
     ctx.response.body = {
       schemes: await schemes.getAll(),
     };

@@ -20,7 +20,7 @@ import { AuthRepository, Algorithm } from "./deps.ts";
 const authConfiguration = { 
   algorithm: "HS512" as Algorithm,
   key: "my-secure-key",
-  tokenExpirationInSeconds:120
+  tokenExpirationInSeconds:60*60
 }
 
 //connecting with the uri(connection string)
@@ -45,27 +45,26 @@ const agenciesRepository = new AgencyRepository({storage:Agency});
 const agenciesController = new AgencyController({ agenciesRepository,authRepository})
 
 //inserting some random data into the schemes of the database 
-schemesRepository.storage.insertOne( {
-  name: "Enforcement Education",
-  category:"deaf pwd candidates ",
-  isActive:true,
-  typeOfBenifits:"This scheme will enable user to get aware of the the things and will benifit him/her to get job ready",
-  disabilityCriteria:40,
-  description:
-    "This scheme focuses on the enforecement of education among the pwd cadidate having the age below 30",
-  startDate:new Date('2022-12-13'),
-  endDate: new Date('2023-19-19'),
-  DateOfBirth: new Date('2002-09-09'),
-  applicationLink:new URL("https://google.com"),
-  schemeType: {
-    centeral:false,
-    state:true
-  },
-  location: {
-    lat: "48.860294",
-    lng: "2.33862",
-  },
-});
+// schemesRepository.storage.insertOne( {
+//   name: "Enforcement Education",
+//   category:"deaf pwd candidates ",
+//   isActive:true,
+//   typeOfBenifits:"This scheme will enable user to get aware of the the things and will benifit him/her to get job ready",
+//   disabilityCriteria:40,
+//   description:
+//     "This scheme focuses on the enforecement of education among the pwd cadidate having the age below 30",
+//   startDate:new Date('2022-12-13'),
+//   endDate: new Date('2023-19-19'), 
+//   applicationLink:new URL("https://google.com"),
+//   schemeType: {
+//     centeral:false,
+//     state:true
+//   },
+//   location: {
+//     lat: "48.860294",
+//     lng: "2.33862",
+//   },
+// });
 
 //defining the server dependencies 
 createServer({
