@@ -44,8 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // var usersRouter = require('./routes/users');
 var User = require('./model/user')
-var verfyUser = require('./user-controller.js/verify-user')
-var image = require('./model/imageSchema');
+// var verfyUser = require('./user-controller.js/verify-user')
+// var image = require('./model/imageSchema');
 const { title } = require("process");
 require("./config/database").connect();
 const auth = require('./middlewares/auth');
@@ -84,29 +84,29 @@ app.get('/', (req, res) => {
 });
 
 //Showing the Registration Form 
-app.get('/register', (req, res) => {
-  res.render('registration', {
-    title: " Regisration Page",
-    messageDisplay: "Welcome to the user Regisration Page",
-    message: 'Kindly fill the details below',
-    first_name: '',
-    last_name: '',
-    Guide_name: '',
-    email: '',
-    number: '',
-    Aadhar_Number: '',
-    Disablity_Type: '',
-    Disability_Percentage: '',
-    UDID_NO: '',
-    // UDID_Card:'',
-    password: '',
-    confirm_password: '',
+// app.get('/register', (req, res) => {
+//   res.render('registration', {
+//     title: " Regisration Page",
+//     messageDisplay: "Welcome to the user Regisration Page",
+//     message: 'Kindly fill the details below',
+//     first_name: '',
+//     last_name: '',
+//     Guide_name: '',
+//     email: '',
+//     number: '',
+//     Aadhar_Number: '',
+//     Disablity_Type: '',
+//     Disability_Percentage: '',
+//     UDID_NO: '',
+//     // UDID_Card:'',
+//     password: '',
+//     confirm_password: '',
 
-  })
-})
+//   })
+// })
 
 // REGISTRATION LOGIC
-app.post('/register', async (req, res) => {
+app.post('/schemes/register', async (req, res) => {
   //our registration logic starts here
   try {
     const { first_name,
@@ -139,45 +139,30 @@ app.post('/register', async (req, res) => {
     console.log(verifyDetails)
 
     if (!verifyDetails) {
-      return res.render('registration', {
-        title: "Registration Page",
-        messageDisplay: "welcome to the user Regisration Section",
-        message: 'All the * feilds are necessary',
-        first_name: '',
-        last_name: '',
-        Guide_name: '',
-        email: '',
-        number: '',
-        Aadhar_Number: '',
-        Disability_Type: '',
-        Disability_Percentage: '',
-        UDID_NO: '',
-        UDID_Card: '',
-        password: '',
-        confirm_password: ''
-      })
+    //   return res.render('registration', {
+    //     title: "Registration Page",
+    //     messageDisplay: "welcome to the user Regisration Section",
+    //     message: 'All the * feilds are necessary',
+    //     first_name: '',
+    //     last_name: '',
+    //     Guide_name: '',
+    //     email: '',
+    //     number: '',
+    //     Aadhar_Number: '',
+    //     Disability_Type: '',
+    //     Disability_Percentage: '',
+    //     UDID_NO: '',
+    //     UDID_Card: '',
+    //     password: '',
+    //     confirm_password: ''
+    //   })
+    // }
+    res.send("All the details are required");
     }
     // check if passwords match
     if (!(password === confirm_password)) {
-      return res.render('registration', {
-        title: "Registration Page",
-        messageDisplay: "Welcome to the user Regisration Section",
-        message: 'Confirm password must be same as password',
-        first_name: '',
-        last_name: '',
-        Guide_name: '',
-        email: '',
-        number: '',
-        Aadhar_Number: '',
-        Disablity_Type: '',
-        Disability_Percentage: '',
-        UDID_NO: '',
-        UDID_Card: '',
-        password: '',
-        confirm_password: ''
-
-      })
-    }
+    //   
+    
     const oldUser = await User.findOne({ email });
     if (oldUser) {
       return res.render('login',
@@ -186,10 +171,11 @@ app.post('/register', async (req, res) => {
           message: 'User Already exists please login',
         })
     }
-
+    res.send('Passwords must be same');
+  }
     const salt = await bcrypt.genSalt(10);
-    var securePassword = await bcrypt.hash(password, salt);
-    var user = await User.create({
+    const securePassword = await bcrypt.hash(password, salt);
+    const user = await User.create({
       first_name,
       last_name,
       Guide_name,

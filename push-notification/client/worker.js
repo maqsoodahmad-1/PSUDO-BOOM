@@ -3,9 +3,10 @@ self.addEventListener("push", e => {
     self.registration.showNotification(
         data.title, //title of the notification
         {
-            body: "Push notification from section.io",//the body of the push notification
+            body: "some new schemes were added",//the body of the push notification
             image: "https://pixabay.com/vectors/bell-notification-communication-1096280",
             icon:  "https://pixabay.com/vectors/bell-notification-communication-1096280", //icon
+            url:   "https://google.com"
         }
     );
 });

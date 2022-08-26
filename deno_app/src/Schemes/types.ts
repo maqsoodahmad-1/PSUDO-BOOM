@@ -1,27 +1,31 @@
 export type Schemes = {
     name: string,
-    // title: string,
-    category: string,
+    description: string,
     isActive: boolean,
+    category: string,
     typeOfBenifits: string,
     disabilityCriteria: number,
-    description: string,
     startDate: Date,
     endDate: Date,
-    applicationLink:URL
     schemeType: {
         centeral:boolean,
         state: boolean
     },
+    location: {
+        lat: string,
+        lng: string
+    },
+    link:URL,
   
 }
 
+export type createScheme = Pick<Schemes, 'name' | 'description' |"link">;
 
 export interface SchemesRepository {
     getAll: () => Promise<Schemes[]>
     exists:(name:string) => Promise<boolean>
-    createScheme: (scheme:Schemes) => Promise<Schemes | Error>
-
+    // createScheme: (scheme:Schemes) => Promise<Schemes | Error>
+    schemesFetching:(scheme:Schemes)=> Promise<Schemes>;
 }
 
 // e/xport Type ScehemPayload = {}
@@ -31,5 +35,6 @@ export interface SchemesRepository {
 
 export interface SchemesController {
     getAll: () => Promise<Schemes[]>;
-    createdScheme:(payload:Schemes) => Promise<Schemes | Error>
+    // createdScheme:(payload:Schemes) => Promise<Schemes | Error>
+    schemesFetching:(schemes:Schemes) => Promise<Schemes>
 }

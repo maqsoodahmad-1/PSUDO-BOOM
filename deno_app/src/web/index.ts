@@ -1,9 +1,8 @@
 import { SchemesController } from "../Schemes/index.ts";
-import { Algorithm, Application, Router, oakCors, jwtMiddleware, helpers } from "../deps.ts";
+import { Algorithm, Application, Router, jwtMiddleware, helpers } from "../deps.ts";
 import { UserController } from "../users/index.ts";
-import { AgencyController } from "../Agencies/index.ts";
+// import { AgencyController } from "../Agencies/index.ts";
 import { _format } from "https://deno.land/std@0.140.0/path/_util.ts";
-import type { Schemes } from "../Schemes/types.ts"
 
  //defining the interface for server 
 interface CreateServerDependencies {
@@ -20,7 +19,7 @@ interface CreateServerDependencies {
   },
   schemes: SchemesController;
   user: UserController;
-  agencies:AgencyController
+  // agencies:AgencyController
 }
 //Our interface enda here
 
@@ -41,7 +40,7 @@ export async function createServer({
   },
   schemes,
   user,
-  agencies,
+  // agencies,
 }: CreateServerDependencies) {
 
   //Defining the application in the oak         // Schemes,
@@ -176,6 +175,13 @@ export async function createServer({
         ctx.response.body = {message: e.message}
       }
     })
+
+    //Api for inserting the scheme details
+    apiRouter.post('/schemes', async (ctx) => {
+      ctx.response.body = {
+        schemes: await schemes.schemesFetching()
+      }
+    });
     apiRouter.get("/schemes", async (ctx) => {
       ctx.response.body = {
         museums: await schemes.getAll(),
@@ -183,29 +189,29 @@ export async function createServer({
     });
 
   //Register route for Agencies
-  apiRouter.post('/agencies/register', async (ctx) => {
-    const { name, email, schemesName, schemesLink, TypeOfAgency } = await ctx.request.body({type:"json"}).value;
-    //check if all the inputs were given
-    if( !name || !email || ! schemesName || schemesLink || TypeOfAgency ) {
-      ctx.response.status = 400;
-      return;
-    }
+  // apiRouter.post('/agencies/register', async (ctx) => {
+  //   const { name, email, schemesName, schemesLink, TypeOfAgency } = await ctx.request.body({type:"json"}).value;
+  //   //check if all the inputs were given
+  //   if( !name || !email || ! schemesName || schemesLink || TypeOfAgency ) {
+  //     ctx.response.status = 400;
+  //     return;
+  //   }
 
-    try {
-      const CreatedAgency = await agencies.register({
-        name,
-        email,
-        schemesName,
-        schemesLink,
-        TypeOfAgency,
-      });
-      ctx.response.status = 201;
-      ctx.response.body = { agencies:CreatedAgency }
-    } catch(e) {
-      ctx.response.status = 400;
-      ctx.response.body = { message:e.message }
-    }
-  })
+  //   try {
+  //     const CreatedAgency = await agencies.register({
+  //       name,
+  //       email,
+  //       schemesName,
+  //       schemesLink,
+  //       TypeOfAgency,
+  //     });
+  //     ctx.response.status = 201;
+  //     ctx.response.body = { agencies:CreatedAgency }
+  //   } catch(e) {
+  //     ctx.response.status = 400;
+  //     ctx.response.body = { message:e.message }
+  //   }
+  // })
   
   // //login route for agencies
   // apiRouter.post('/agencies/login', async (ctx) => {
@@ -225,49 +231,49 @@ export async function createServer({
   // });
  
   //Api for updatig the Agency details
-  apiRouter.put('/agencies/update/:name', async(ctx) => {
-    const { name } = helpers.getQuery( ctx, { mergeParams: true });
-    const { newname } = await ctx.request.body({type:"json"}).value;
-    try {
-      ctx.response.body = {updatedAgency:await agencies.updatedAgency({name,newname})}
-      ctx.response.status = 201;
-    } catch(e) {
-      ctx.response.body = {message:e.message}
-      ctx.response.status= 400;
-    }
+  // apiRouter.put('/agencies/update/:name', async(ctx) => {
+  //   const { name } = helpers.getQuery( ctx, { mergeParams: true });
+  //   const { newname } = await ctx.request.body({type:"json"}).value;
+  //   try {
+  //     ctx.response.body = {updatedAgency:await agencies.updatedAgency({name,newname})}
+  //     ctx.response.status = 201;
+  //   } catch(e) {
+  //     ctx.response.body = {message:e.message}
+  //     ctx.response.status= 400;
+  //   }
     
-  })
+  // })
 
-  //Api for deleting the Agencies form the database
-  apiRouter.delete("/agencies/delete/:name",  async (ctx) => {
-   const { name } = helpers.getQuery(ctx, { mergeParams:true })
-    try {
-      const deletedAgency = await agencies.deleteAgency({ name })
-      ctx.response.status = 200;
-      ctx.response.body = { agency:deletedAgency };
-    } catch(e) {
-      ctx.response.status = 400;
-      ctx.response.body = {message: e.message}
-    }
-  })
+  // //Api for deleting the Agencies form the database
+  // apiRouter.delete("/agencies/delete/:name",  async (ctx) => {
+  //  const { name } = helpers.getQuery(ctx, { mergeParams:true })
+  //   try {
+  //     const deletedAgency = await agencies.deleteAgency({ name })
+  //     ctx.response.status = 200;
+  //     ctx.response.body = { agency:deletedAgency };
+  //   } catch(e) {
+  //     ctx.response.status = 400;
+  //     ctx.response.body = {message: e.message}
+  //   }
+  // })
 
   //Api for creating schema
-  apiRouter.post('/schemes/create',  async(ctx) => {
-    const { name,description,isActive,category,typeOfBenifits,disabilityCriteria,startDate,endDate,schemeType,location,applicationLink } = await ctx.request.body({type:"json"}).value
-  if( !name || !description || !isActive || ! category || ! typeOfBenifits || !startDate || !endDate || !schemeType || !location || !applicationLink ) {
-    ctx.response.status = 400;
-    return;
-  }
-  try{
-    const schemevalues = await { name,description,isActive,category,typeOfBenifits,disabilityCriteria,startDate,endDate,schemeType,location,applicationLink}
-    const createdScheme = await schemes.createdScheme(schemevalues)
-    ctx.response.body = {CreatedScehem: createdScheme}
-    ctx.response.status = 200
-  } catch (e) {
-    ctx.response.status = 400;
-  }
-}
-  )
+//   apiRouter.post('/schemes/create',  async(ctx) => {
+//     const { name,description,isActive,category,typeOfBenifits,disabilityCriteria,startDate,endDate,schemeType,location,applicationLink } = await ctx.request.body({type:"json"}).value
+//   if( !name || !description || !isActive || ! category || ! typeOfBenifits || !startDate || !endDate || !schemeType || !location || !applicationLink ) {
+//     ctx.response.status = 400;
+//     return;
+//   }
+//   try{
+//     const schemevalues = await { name,description,isActive,category,typeOfBenifits,disabilityCriteria,startDate,endDate,schemeType,location,applicationLink}
+//     const createdScheme = await schemes.createdScheme(schemevalues)
+//     ctx.response.body = {CreatedScehem: createdScheme}
+//     ctx.response.status = 200
+//   } catch (e) {
+//     ctx.response.status = 400;
+//   }
+// }
+  // )
 
   //get the list of all the schemes
   apiRouter.get("/schemes/get", async (ctx) => {

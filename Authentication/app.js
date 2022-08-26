@@ -22,8 +22,10 @@ app.set("view engine", "ejs");
 
 module.export = app ;
 //importing user context
-var User = require("./model/user");
-const { secureHeapUsed } = require("crypto");
+const User = require("./model/user");
+const Schemes = require("./model/schemes");
+// const { secureHeapUsed } = require("crypto");
+// const { default: Schemes }=require("./model/schemes.js");
 //=====================
 // ROUTESr },
 //=====================
@@ -54,11 +56,11 @@ app.get("/", function (req, res) {
   
   //Register
   app.post("/register", async (req, res) => {
-    
+  
     // Our register logic starts here
     try {
       // Get user input
-      var { first_name, last_name, email, password,confirm_password } = req.body;
+      const { first_name, last_name, email, password,confirm_password } = req.body;
       // console.log(first_name);
       // console.log(last_name);
       // console.log(email);
@@ -125,16 +127,16 @@ app.get("/", function (req, res) {
 // //     return null;
 //   }
 // hashPassword(password);
-// console.log(securePassword);
+// console.log(securePassword
 // // hashPassword(password);
 // saltRounds = 10;
 
-var salt = await bcrypt.genSalt(10);
-var securePassword = await  bcrypt.hash(password,salt)
+const salt = await bcrypt.genSalt(10);
+const securePassword = await  bcrypt.hash(password,salt)
 //console.log(password)
 //console.log(securePassword);
   // Create user in our database
-  var user = await User.create({
+  const user = await User.create({
     first_name,
     last_name,
     email, // sanitize: convert email to lowercase
@@ -182,7 +184,7 @@ app.post("/login",async (req,res) => {
 
   try {
     // Get user input
-    var { email, password } = req.body;
+    const { email, password } = req.body;
     console.log(password)
     // Validate user input
     if (!(email && password)) {
@@ -238,10 +240,73 @@ app.post("/login",async (req,res) => {
 
 });
 
+app.post('/schemes/register', async(req, res) => {
+  try {  
+  const {
+  //  SchemeName,
+   heading,
+   description,
+   schemeType,
+   source,
+   link,
+  //  schemeTitle,
+  //  SchemeCategory,
+  //  DisabilityCriteria,
+  //  DisabiltityType,
+  //  TypeOfBenifits,
+  //  LaunchDate,
+    } = await req.body;
+
+// res.send(SchemeName);
+const SchemeDetails = await Schemes.create({
+  heading,
+  description,
+  schemeType,
+  source,
+  link,
+  // DisabilityCriteria,
+  // SchemeDescription,
+  // DisabiltityType,
+  // TypeOfBenifits,
+  // LaunchDate,
+  // SchemeCategory,
+
+})
+console.log(SchemeDetails);
+res.send(SchemeDetails);
+} catch(err) {
+  res.send(err);
+}
+}
+)
+
 
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
 
+//Api for  maps 
+const map = require('./model/map_schema');
+app.post('/insert/loc', async(req, res) => {
+
+  const {
+    centerName,
+    State,
+    Location,
+    geolocation,
+
+  } = req.body;
+//creating the user
+const LocationDetails = await map.create(
+  {
+    centerName,
+    State,
+    Location,
+    geolocation,
+  }
+)
+console.log(LocationDetails);
+res.send(LocationDetails)
+})
 //Server listening
 
 app.listen(port,() => {

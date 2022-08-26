@@ -34,7 +34,7 @@ app.post('/subscribe', (req, res) => {
     res.status(201).json({});
 
     //create payload: specified the details of the push notification
-    const payload = JSON.stringify({title: 'Section.io Push Notification'})
+    const payload = JSON.stringify({title: 'Some more schemes were added'},{url:'www.google.com'})
 
     //pass the object into sendNotification functon and catch any error
     webpush.sendNotification(subscription, payload)

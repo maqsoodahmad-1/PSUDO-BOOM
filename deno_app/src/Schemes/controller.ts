@@ -55,24 +55,33 @@ export class Controller implements SchemesController {
         return schems;
     }
 
-
-    async createdScheme(payload:Schemes){
-        if(await this.schemesRepository.exists(payload.name)) {
-            return Promise.reject("Scheme with the same name already exists");
-        }
-    const createdScheme = await this.schemesRepository.createScheme( await this.getSchemes(
-        payload.name, 
-        payload.description,
-        payload.isActive,
-        payload.category,
-        payload.typeOfBenifits,
-        payload.disabilityCriteria,
-        payload.startDate,
-        payload.endDate,
-        payload.schemeType,
-        payload.location,
-        payload.applicationLink
-        ))
-        return createdScheme;
+    async schemesFetching(schemes:Schemes){
+     try {
+        return await this.schemesRepository.schemesFetching(schemes);
+     }
+     catch(e){
+     return e;
     }
+
 }
+}
+//     async createdScheme(payload:Schemes){
+//         if(await this.schemesRepository.exists(payload.name)) {
+//             return Promise.reject("Scheme with the same name already exists");
+//         }
+// //     const createdScheme = await this.schemesRepository.createScheme( await this.getSchemes(
+// //         payload.name, 
+// //         payload.description,
+// //         payload.isActive,
+// //         payload.category,
+// //         payload.typeOfBenifits,
+// //         payload.disabilityCriteria,
+// //         payload.startDate,
+// //         payload.endDate,
+// //         payload.schemeType,
+// //         payload.location,
+// //         payload.applicationLink
+// //         ))
+// //         return createdScheme;
+// //     }
+// // }
